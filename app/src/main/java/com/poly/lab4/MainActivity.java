@@ -77,6 +77,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        MyDatabase myDatabase =
+                new MyDatabase(MainActivity.this);
+        myDatabase.themSinhVien();
+        long kq = myDatabase.insertStudent(1,"Huy","09133604687");
+        myDatabase.insertStudent(2,"Huy","09133604687");
+        myDatabase.insertStudent(3,"Huy","09133604687");
+
+        if (kq > 0){
+            // thong bao la thanh cong
+        }else {
+            // thong báo ko thành công
+        }
+
 
     }
 
