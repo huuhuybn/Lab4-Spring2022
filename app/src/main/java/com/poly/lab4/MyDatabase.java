@@ -64,12 +64,13 @@ public class MyDatabase extends SQLiteOpenHelper {
         Cursor cursor = sqLiteDatabase.rawQuery(query, null);
         if (cursor.getCount() > 0){
             cursor.moveToFirst();
-            while (cursor.moveToNext()){
+            while (!cursor.isAfterLast()){
                 int id = cursor.getInt(0);
                 String name = cursor.getString(1);
                 String phone = cursor.getString(2);
                 Student student = new Student(id,name,phone);
                 students.add(student);
+                cursor.moveToNext();
             }
             cursor.close();
         }

@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 ArrayList<Student> students = myDatabase.getAllStudents();
                 // dua danh sanh len ListView
+                Toast.makeText(MainActivity.this,students.size() + "", Toast.LENGTH_SHORT).show();
 
             }
         });
