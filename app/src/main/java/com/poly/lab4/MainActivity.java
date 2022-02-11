@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,80 +18,65 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        MyDatabase myDatabase = new MyDatabase(MainActivity.this);
+        EditText id = findViewById(R.id.editTextNumber);
+        EditText name = findViewById(R.id.editTextNumber2);
+        EditText phone = findViewById(R.id.editTextTextPersonName);
 
-        EditText sothu1 = findViewById(R.id.editTextNumber);
-        EditText sothu2 = findViewById(R.id.editTextNumber2);
-        Button btn = findViewById(R.id.button);
-
-        btn.setOnClickListener(new View.OnClickListener() {
+        Button them = findViewById(R.id.button);
+        Button sua = findViewById(R.id.button2);
+        Button laydanhsach = findViewById(R.id.button3);
+        Button xoa = findViewById(R.id.button4);
+        them.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // su kien tinh toán xảy ra ở đây
-                String num1 = sothu1.getText().toString();
-                String num2 = sothu2.getText().toString();
-
-                // tìm bội chung nhỏ nhất
-                int so1 = Integer.parseInt(num1);
-                int so2 = Integer.parseInt(num2);
-
-                int boiChung = 1;
-
-                while (true){
-                    if (boiChung % so1 == 0 && boiChung % so2 == 0){
-                        break;
-                    }
-                    boiChung++;
+              int _id = Integer.parseInt(id.getText().toString());
+              String _name = name.getText().toString();
+              String _phone = phone.getText().toString();
+              long kq = myDatabase.insertStudent(_id,_name,_phone);
+              if (kq >0) {
+                  Toast.makeText(MainActivity.this,"OK",Toast.LENGTH_SHORT).show();
+              }else {
+                  Toast.makeText(MainActivity.this,"KHONG THANH CONG",Toast.LENGTH_SHORT).show();
+              }
+            }
+        });
+        sua.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int _id = Integer.parseInt(id.getText().toString());
+                String _name = name.getText().toString();
+                String _phone = phone.getText().toString();
+                long kq = myDatabase.updateStudent(_id,_name,_phone);
+                if (kq >0) {
+                    Toast.makeText(MainActivity.this,"OK",Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MainActivity.this,"KHONG THANH CONG",Toast.LENGTH_SHORT).show();
                 }
-                // chuyển màn hình .
-                Intent intent = new Intent(MainActivity.this,
-                        Man2Activity.class);
-                Bundle bundle = new Bundle();
-                // bỏ boiChung vào bundle
-                bundle.putInt("num",boiChung);
-
-                // bỏ bundle vào intent chuyển sang màn hình
-                intent.putExtra("data",bundle);
-
-                startActivity(intent);
-
             }
         });
-
-        Button btn2 = findViewById(R.id.button2);
-        Button btn3 = findViewById(R.id.button3);
-
-        btn2.setOnClickListener(new View.OnClickListener() {
+        laydanhsach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String uri = "tel:0913360468" ;
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse(uri));
-                startActivity(intent);
+                ArrayList<Student> students = myDatabase.getAllStudents();
+                // dua danh sanh len ListView
+
             }
         });
-
-        btn3.setOnClickListener(new View.OnClickListener() {
+        xoa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            String link = "https://www.google.com/maps/place/Hanoi+University/@21.0012405,105.7938072,14z/data=!4m5!3m4!1s0x3135adb29ed54487:0xbe22035eae87b5d7!8m2!3d20.9887865!4d105.7956311";
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(link));
-                startActivity(intent);
+                int _id = Integer.parseInt(id.getText().toString());
+                long kq = myDatabase.deleteStudent(_id);
+                if (kq >0) {
+                    Toast.makeText(MainActivity.this,"OK",Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(MainActivity.this,"KHONG THANH CONG",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-        MyDatabase myDatabase =
-                new MyDatabase(MainActivity.this);
-        myDatabase.themSinhVien();
-        long kq = myDatabase.insertStudent(1,"Huy","09133604687");
-        myDatabase.insertStudent(2,"Huy","09133604687");
-        myDatabase.insertStudent(3,"Huy","09133604687");
 
-        if (kq > 0){
-            // thong bao la thanh cong
-        }else {
-            // thong báo ko thành công
-        }
 
 
     }
